@@ -1,0 +1,23 @@
+DESCRIPTION:
+
+
+Log Sources Required:
+
+Splunk Technical Add-ons Required:
+
+Splunk Processing Language:
+index=winsysmon source=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational parent_process_path IN ("*RazerInstaller.exe", "*SteelSeries*.exe")
+| fields _time host user signature process_path process_guid parent_process_path parent_process_guid
+| eval matchfield = process_guid
+| join type=outer matchfield host
+[
+search index=winsysmon source=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational
+| rename
+process_guid AS end_process_guid
+process_path AS end_process_path
+parent_process_guid AS end_parent_process_guid
+parent_process_path AS end_parent_process_path 
+| fields host end_process_guid end_process_path end_parent_process_guid
+| eval matchfield = end_parent_process_guid
+]
+| table _time host user signature parent_process_path process_path end_process_path
