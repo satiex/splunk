@@ -1,3 +1,2 @@
 # splunk
-A collection of helpful Splunk queries for security monitoring and detection and threat hunting.
-TEST
+A collection of helpful and practical Splunk queries for security monitoring and detection and threat hunting.
